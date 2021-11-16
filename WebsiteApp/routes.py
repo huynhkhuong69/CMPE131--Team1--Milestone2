@@ -6,6 +6,7 @@ from wtforms.validators import Email
 from WebsiteApp import app_Obj, db
 from WebsiteApp.forms import LoginForm, RegisterForm, SettingsForm, ToDoListForm
 from WebsiteApp.models import User, ToDoList
+from flask_mail import Mail, Message
 
 @app_Obj.route('/')
 @app_Obj.route('/home')
@@ -110,4 +111,21 @@ def update(id):
             return flash('Error: could not update a task')
     else:
         return render_template('update.html', task = task, form=form)
+
+@app_Obj.route('/send_message', methods=['GET', 'POST'])
+def send_message():
+    if  request.method == "POST":
+        email = request.form['email']
+        subject = request.form['subject']
+        msg = request.form['message']
+
+        message = Message(subject, sender="huynhkhuong8203@gmail.com", recipients=[email])
+        message.body = msg
+
+        #send mail
+        mail.send(message)
+        success = "Message Sent"
+    else:
+        return render_template("email.html", send_message=send_message)
+
 
