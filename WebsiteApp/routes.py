@@ -112,6 +112,7 @@ def update(id):
     else:
         return render_template('update.html', task = task, form=form)
 
+#send email route
 @app_Obj.route('/send_message', methods=['GET', 'POST'])
 def send_message():
     if  request.method == "POST":

@@ -8,6 +8,7 @@ basedir = os.path.abspath(os.path.dirname(__file__))
 
 app_Obj = flask.Flask(__name__) 
 
+#email API documentation 
 app_Obj.config['MAIL_SERVER'] = 'smtp.gmail.com'
 app_Obj.config['MAIL_PORT'] = 465
 app_Obj.config['MAIL_USERNAME'] = "huynhkhuong8203@gmail.com" #use ur email
