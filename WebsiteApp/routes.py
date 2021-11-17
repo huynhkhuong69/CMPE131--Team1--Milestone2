@@ -154,3 +154,20 @@ def edit_flashCard(id):
 def view_flashCards():
     flashcards = FlashCards.query.all()
     return render_template('view_flashcards.html',flashcards=flashcards)
+
+@app_Obj.route('/send_message', methods=['GET', 'POST'])
+def send_message():
+    if  request.method == "POST":
+        email = request.form['email']
+        subject = request.form['subject']
+        msg = request.form['email']
+
+        db.session.commit()
+
+        message = Message('subject', sender="huynhkhuong8203@gmail.com", recipients=[email])
+        message.body = msg
+
+        mail.send(message)
+        success = "Message Sent"
+    else:
+        return render_template("email.html", send_message=send_message)
