@@ -115,17 +115,11 @@ def update(id):
 @app_Obj.route('/send_message', methods=['GET', 'POST'])
 def send_message():
     if  request.method == "POST":
-        email = request.form['email']
-        subject = request.form['subject']
-        msg = request.form['message']
-
-        message = Message(subject, sender="huynhkhuong8203@gmail.com", recipients=[email])
-        message.body = msg
-
-        #send mail
+        message = Message('Subject here', sender="noreply@demo.com", recipients=['huynhkhuong8203@gmail.com'])
+        message.body = "CMPE131 Project!!!"
+        #send email
         mail.send(message)
-        success = "Message Sent"
-    else:
-        return render_template("email.html", send_message=send_message)
-
+        #lets user know message is sent
+        return "Message Sent"
+    return render_template("email.html")
 
