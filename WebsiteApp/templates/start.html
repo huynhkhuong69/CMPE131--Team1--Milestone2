@@ -1,0 +1,47 @@
+{% extends "base.html" %} {% block content %}
+
+<body class="text-center">
+    
+    <h1 style="color: black;"><strong> {{task.task_name}} </strong></h1>
+    <button onclick="start()">Start</button>
+    <button onclick="stop()">Stop</button>
+    <p style="color: black;" id="timer1">0000</p>
+    <script>
+        var secondTime;
+        var num = 0;
+        secondTime = num;
+        var stopSign = 'F';
+        var progress = setInterval(startTimer, 1000);
+        function start() {
+    //   countdownTimer = setInterval(startTimer, 1000);
+    //   document.getElementById("timer1").innerHTML = timer.value;
+    //   myTimer = timer.value * 60;
+        
+        progress();
+    }
+    function startTimer(){ 
+        secondTime++; 
+        document.getElementById("timer1").innerHTML = secondTime; 
+    }
+
+    function stop(){
+        clearInterval(progress);
+        var h = Math.floor(secondTime / 3600);
+        var m = Math.floor((secondTime / 60 % 60));
+        var s = Math.floor((secondTime % 60));
+        var result = h + "hours" + m + "mins" + s + "seconds";
+        alert("time spend on this task: "+result)
+    }
+
+
+
+
+    </script>
+
+
+
+
+
+
+{% endblock %}
+</body>

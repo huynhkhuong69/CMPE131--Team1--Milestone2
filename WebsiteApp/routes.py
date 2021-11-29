@@ -121,6 +121,23 @@ def update(id):
     else:
         return render_template('update.html', task = task, form=form,title=title) 
 
+## Youhao's work
+## Add Time spend on Assignment feature
+@app_Obj.route ('/start/<int:id>', methods = ['GET', 'POST'])
+def start(id):
+    form = ToDoListForm()
+    title = "Start Task"
+    task = ToDoList.query.get_or_404(id)
+    if request.method == 'POST':
+        task.task_name = request.form['task_name']
+        try:
+            db.session.commit()
+            return redirect ('/todolist')
+        except:
+            return flash('Error: could not update a task')
+    else:
+        return render_template('start.html', task = task, form=form,title=title) 
+
 @app_Obj.route('/create-edit-flashcards', methods = ['GET', 'POST'])
 def create_flashcards():
     form = create_FlashCardsForm()
