@@ -12,6 +12,8 @@ from WebsiteApp import app_Obj, db, mail
 from WebsiteApp.forms import (LoginForm, RegisterForm, SettingsForm, ToDoListForm, create_FlashCardsForm , pomorodoTimerForm )
 from WebsiteApp.models import FlashCards, ToDoList, User
 
+from bs4 import BeautifulSoup
+import requests
 
 @app_Obj.route('/')
 @app_Obj.route('/home')
@@ -138,7 +140,7 @@ def start(id):
     else:
         return render_template('start.html', task = task, form=form,title=title) 
 
-@app_Obj.route('/create-edit-flashcards', methods = ['GET', 'POST'])
+@app_Obj.route('/create-edit-flashcards/', methods = ['GET', 'POST'])
 def create_flashcards():
     form = create_FlashCardsForm()
     title = "Create-Edit Flash Cards"
@@ -251,3 +253,16 @@ def timer (t):
         t -=1
     pyttsx3.speak ("beep beep beep beep time to work")
     return t
+
+@app_Obj.route('/api/image-search/<string:keyword>', methods=['GET'])
+def imageSearch(keyword):
+    response = requests.get(f'https://www.google.com/search?q={keyword}&tbm=isch')
+    bs = BeautifulSoup(response.text, 'lxml')
+    srcList = []
+    for src in bs.find_all('img'):
+        if('http' in src['src']):
+            srcList.append(src['src'])
+        else:
+            pass
+    json_data = json.dumps(srcList)
+    return json_data

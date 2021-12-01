@@ -1,3 +1,4 @@
 flask==2.0.2
 Flask_Mail==0.9.1
 pyttsx3==2.90
+beautifulsoup4==4.10.0

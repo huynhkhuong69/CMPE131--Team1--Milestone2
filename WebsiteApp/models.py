@@ -34,6 +34,7 @@ class FlashCards(UserMixin, db.Model):
     flashCard_name = db.Column(db.String(256))
     flashCard_description = db.Column(db.String(512))
     flashCard_hint = db.Column(db.String(64))
+    flashCard_image = db.Column(db.String(64))
 
     def __repr__(self):
         return f'<FlashCard {self.id} : {self.flashCard_name}>'

@@ -1,39 +1,125 @@
 {% extends "base.html" %}
 {% block content %}
-<form method = "POST" novalidate style="text-align: center;">
+<body>
+  <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+
+  <form method = "POST" novalidate style="text-align: center;">
     <h1 style="display: block; text-align: center; color:black;">Flash Cards Factory</h1>
     {{form.hidden_tag()}}
     <p style="color:black"> {{form.flashcard_name.label}} </br> {{form.flashcard_name (size=64)}} </p> 
     <p style="color:black"> {{form.flashcard_description.label}} </br> {{form.flashcard_description (size=64)}} </p> 
     <p style="color:black"> {{form.flashcard_hint.label}} </br> {{form.flashcard_hint (size=64)}} </p> 
-	<p>	{{form.save_flashCard (size= 32)}} </p>
-</form>
+    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#FlashCardModal" style="margin-top: 5px; margin-left: 25px; margin-bottom: 15px;">
+      Select FlashCard Image
+    </button>
+    <p>	{{form.save_flashCard (size= 32)}} </p>
+  </form>
 
-<div class="row row-cols-1 row-cols-md-4 g-4" style="margin-left: 10px; margin-right: 10px;">
-    {% for cards in flashcards %}
-    <div class="col">
-        <div class="card">
-            <div class="card-body">
-                <h5 class="card-title"> {{cards.flashCard_name}} </h5>
-                <p class="card-text">{{cards.flashCard_description}} </p>
-                <p class="card-text"><strong>Hint:</strong> {{cards.flashCard_hint}} </p>
-                <a href='edit-flashcard/{{cards.id}}'> Edit Flash Card</a></br>
-                <a href='delete-flashcard/{{cards.id}}'> Delete Flash Card</a>
+  <!-- Image Modal -->
+  <div class="modal fade" id="FlashCardModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <input class="form-control" type="search" placeholder="Search" aria-label="Search" id="Image_NameFlashCard">
+            <button class="btn btn-outline-success" type="submit" onclick="getImage()">Search</button>
+          </div>
+          <div class="modal-body">
+            <h5 class="text-center"> Select Image For FlashCard </h5>
+              <div class="col">
+                <div class="card overflow-scroll" style="height: 400px;">
+                    <div class="card-body col-sm-12" id='CardBody'>
+
+                    </div>
+                </div>
             </div>
-        </div>
-    </div>
-    {% endfor %}
-    <script>
-        setTimeout(function confirmAction() {
-          let confirmAction = confirm(
-            "You've studied for one hour. Do you want to take a break?"
-          );
-          if (confirmAction) {
-            alert("Enjoy your break!");
-          } else {
-            alert("Have a good study!");
+          <div class="modal-footer">
+            <button type="button" class="btn btn-danger" data-dismiss="modal"> Cancel </button>
+            <button class="btn btn-success" type="submit" style="margin-top: 15px; margin-bottom: 15px; margin-right: 15px;">Save Flashcard</button>
+          </div>
+      </div>
+      <script>
+        async function getImage() {
+          while(document.getElementById('input')) {
+            var element = document.getElementById('input');
+            element.parentNode.removeChild(element);
           }
-        }, 3600000);
-      </script>
+          var url = "/api/image-search/" + document.getElementById('Image_NameFlashCard').value;
+          const response = await fetch(url, {
+          "headers": {
+            "accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9",
+            "accept-language": "en-US,en;q=0.9",
+            "sec-ch-ua": "\" Not A;Brand\";v=\"99\", \"Chromium\";v=\"96\", \"Google Chrome\";v=\"96\"",
+            "sec-ch-ua-mobile": "?0",
+            "sec-ch-ua-platform": "\"Windows\"",
+            "sec-fetch-dest": "document",
+            "sec-fetch-mode": "navigate",
+            "sec-fetch-site": "same-origin",
+            "sec-fetch-user": "?1",
+            "upgrade-insecure-requests": "1"
+          },
+          "referrerPolicy": "strict-origin-when-cross-origin",
+          "method": "GET",
+          "mode": "cors",
+          "credentials": "include"
+        });
+        var data = await response.json();
+        var jsonObjLength = Object.keys(data).length
+        console.log(jsonObjLength)
+        for(let i = 1; i < jsonObjLength; i++) { 
+          try { 
+            var cardBody_Div = document.getElementById('CardBody')
+            var input = document.createElement('input')
+            
+            input.setAttribute('type','image')
+            input.setAttribute('id','input')
+            input.setAttribute('name', i)
+            input.setAttribute('class', 'form-control')
+            // input.setAttribute("onclick", "save_flashCard("+i+")")
+            input.setAttribute('src', data[i])
+            input.setAttribute('style', 'margin-left: 30px; width: 200px; height: 150px; min-width: 100px; min-height: 100px;display: inline-block')
+            
+            cardBody_Div.appendChild(input)
+          }
+          catch(TypeError) {
+            continue
+          }
+        }}
+        </script>
+    </div>
+  </div>
 </div>
-{% endblock %}
+
+  <div class="row row-cols-1 row-cols-md-4 g-4" style="margin-left: 10px; margin-right: 10px;">
+      {% for cards in flashcards %}
+      <div class="col">
+          <div class="card">
+              <div class="card-body">
+                  <h5 class="card-title"> {{cards.flashCard_name}} </h5>
+                  <p class="card-text">{{cards.flashCard_description}} </p>
+                  <p class="card-text"><strong>Hint:</strong> {{cards.flashCard_hint}} </p>
+                  <p>{{cards.flashCard_image}}</p>
+                  <img src="{{cards.flashCard_image}}">
+                  <a href='edit-flashcard/{{cards.id}}'> Edit Flash Card</a></br>
+                  <a href='delete-flashcard/{{cards.id}}'> Delete Flash Card</a>
+              </div>
+          </div>
+      </div>
+      {% endfor %}
+      <script>
+          setTimeout(function confirmAction() {
+            let confirmAction = confirm(
+              "You've studied for one hour. Do you want to take a break?"
+            );
+            if (confirmAction) {
+              alert("Enjoy your break!");
+            } else {
+              alert("Have a good study!");
+            }
+          }, 3600000);
+        </script>
+  </div>
+  {% endblock %}
+
+</body>
