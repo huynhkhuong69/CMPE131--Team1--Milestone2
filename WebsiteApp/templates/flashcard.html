@@ -12,9 +12,8 @@
     <p style="color:black"> {{form.flashcard_description.label}} </br> {{form.flashcard_description (size=64)}} </p> 
     <p style="color:black"> {{form.flashcard_hint.label}} </br> {{form.flashcard_hint (size=64)}} </p> 
     <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#FlashCardModal" style="margin-top: 5px; margin-left: 25px; margin-bottom: 15px;">
-      Select FlashCard Image
+      Select FlashCard Image + Save
     </button>
-    <p>	{{form.save_flashCard (size= 32)}} </p>
   </form>
 
   <!-- Image Modal -->
@@ -26,7 +25,7 @@
             <button class="btn btn-outline-success" type="submit" onclick="getImage()">Search</button>
           </div>
           <div class="modal-body">
-            <h5 class="text-center"> Select Image For FlashCard </h5>
+            <h5 class="text-center"> Select Image For FlashCard | Once an image selected Flashcard is automatically saved</h5>
               <div class="col">
                 <div class="card overflow-scroll" style="height: 400px;">
                     <div class="card-body col-sm-12" id='CardBody'>
@@ -36,9 +35,63 @@
             </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-danger" data-dismiss="modal"> Cancel </button>
-            <button class="btn btn-success" type="submit" style="margin-top: 15px; margin-bottom: 15px; margin-right: 15px;">Save Flashcard</button>
           </div>
       </div>
+      <script>
+        async function saveFlashcard(i) {
+          console.log(i)
+          var url = "/api/image-search/" + document.getElementById('Image_NameFlashCard').value;
+          const response = await fetch(url, {
+          "headers": {
+            "accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9",
+            "accept-language": "en-US,en;q=0.9",
+            "sec-ch-ua": "\" Not A;Brand\";v=\"99\", \"Chromium\";v=\"96\", \"Google Chrome\";v=\"96\"",
+            "sec-ch-ua-mobile": "?0",
+            "sec-ch-ua-platform": "\"Windows\"",
+            "sec-fetch-dest": "document",
+            "sec-fetch-mode": "navigate",
+            "sec-fetch-site": "same-origin",
+            "sec-fetch-user": "?1",
+            "upgrade-insecure-requests": "1"
+            },
+            "referrerPolicy": "strict-origin-when-cross-origin",
+            "method": "GET",
+            "mode": "cors",
+            "credentials": "include"
+          });
+          var data = await response.json();
+          var href = data[i].substring(48)
+
+          try {
+            var url_2 = "/api/save-flashcard/" + document.getElementById('flashcard_name').value + '/' + document.getElementById('flashcard_description').value + '/' + document.getElementById('flashcard_hint').value + '/' + href;
+            console.log(url)
+            const response_2 = await fetch(url_2, {
+              "headers": {
+              "accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9",
+              "accept-language": "en-US,en;q=0.9",
+              "cache-control": "max-age=0",
+              "sec-ch-ua": "\" Not A;Brand\";v=\"99\", \"Chromium\";v=\"96\", \"Google Chrome\";v=\"96\"",
+              "sec-ch-ua-mobile": "?0",
+              "sec-ch-ua-platform": "\"Windows\"",
+              "sec-fetch-dest": "document",
+              "sec-fetch-mode": "navigate",
+              "sec-fetch-site": "none",
+              "sec-fetch-user": "?1",
+              "upgrade-insecure-requests": "1"
+              },
+              "referrerPolicy": "strict-origin-when-cross-origin",
+              "body": null,
+              "method": "POST",
+              "mode": "cors",
+              "credentials": "include"
+            });
+          } catch(TypeError) {
+            console.log('')
+            location.reload()
+          }
+          location.reload()
+        }
+      </script>
       <script>
         async function getImage() {
           while(document.getElementById('input')) {
@@ -76,7 +129,7 @@
             input.setAttribute('id','input')
             input.setAttribute('name', i)
             input.setAttribute('class', 'form-control')
-            // input.setAttribute("onclick", "save_flashCard("+i+")")
+            input.setAttribute("onclick", "saveFlashcard("+i+")")
             input.setAttribute('src', data[i])
             input.setAttribute('style', 'margin-left: 30px; width: 200px; height: 150px; min-width: 100px; min-height: 100px;display: inline-block')
             
@@ -94,15 +147,14 @@
   <div class="row row-cols-1 row-cols-md-4 g-4" style="margin-left: 10px; margin-right: 10px;">
       {% for cards in flashcards %}
       <div class="col">
-          <div class="card">
-              <div class="card-body">
+          <div class="card" style="color: black">
+              <div class="card-body" style="background-color: white">
                   <h5 class="card-title"> {{cards.flashCard_name}} </h5>
                   <p class="card-text">{{cards.flashCard_description}} </p>
                   <p class="card-text"><strong>Hint:</strong> {{cards.flashCard_hint}} </p>
-                  <p>{{cards.flashCard_image}}</p>
-                  <img src="{{cards.flashCard_image}}">
-                  <a href='edit-flashcard/{{cards.id}}'> Edit Flash Card</a></br>
-                  <a href='delete-flashcard/{{cards.id}}'> Delete Flash Card</a>
+                  <img src="{{cards.flashCard_image}}"> <br>
+                  <a href='/edit-flashcard/{{cards.id}}'> Edit Flash Card</a></br>
+                  <a href='/delete-flashcard/{{cards.id}}'> Delete Flash Card</a>
               </div>
           </div>
       </div>

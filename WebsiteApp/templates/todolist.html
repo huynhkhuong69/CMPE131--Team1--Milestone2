@@ -16,9 +16,9 @@
 		<tr>
 			<td style= 'color:black;'> {{task.task_name}}</td>
 			<td>
-				<a href="delete/{{task.id}}" style="margin-left: 10px;">Delete</a>
-				<a href="update/{{task.id}}">Update</a> 
-				<a href="start/{{task.id}}"> Start</a>
+				<button type="button" class="btn btn-success" href="start/{{task.id}}" style="margin-left: 25px;">Start</button>
+				<button type="button" class="btn btn-secondary" href="update/{{task.id}}">Update</button>
+				<button type="button" class="btn btn-danger" href="delete/{{task.id}}">Delete</button>
 			</td>
 		</tr>
 		{% endfor %}

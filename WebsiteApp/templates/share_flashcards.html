@@ -5,8 +5,11 @@
             <div class="card">
                 <div class="card-body">
                     <label>
-                        <h5 class="card-title"> {{cards.flashCard_name}} </h5>           
-                        <p class="card-text"> {{cards.flashCard_description}} </p>       
+                        <h2 class="card-title"><strong>Title:</strong> {{cards.flashCard_name}} </h2>           
+                        <p class="card-text"><strong>Description:</strong>  {{cards.flashCard_description}} </p>       
+                        <p class="card-text"><strong>Hint:</strong> {{cards.flashCard_hint}} </p>       
+                        <img class="card-text" src="{{cards.flashCard_image}}"> </img>   
+                        <br>    
                         |==================================================================|
                     </label>
                     
