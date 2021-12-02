@@ -37,7 +37,7 @@ class FlashCards(UserMixin, db.Model):
     flashCard_image = db.Column(db.String(64))
 
     def __repr__(self):
-        return f'<FlashCard {self.id} : {self.flashCard_name}>'
+        return f'<FlashCard {self.id} : {self.flashCard_name}><Image: {self.flashCard_image}>'
 
 @login.user_loader
 def load_user(id):

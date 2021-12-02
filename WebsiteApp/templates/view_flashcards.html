@@ -7,20 +7,26 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
     
     <!-- Button trigger modal -->
-    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#ShareFlashCardsModal" style="margin-top: 15px; margin-left: 25px; margin-bottom: -15px;">
+    <button type="button" class="btn btn-success" data-toggle="modal" data-target="#ShareFlashCardsModal" style="margin-top: 15px; margin-left: 25px; margin-bottom: -15px;">
         Share Flash Cards
     </button>
-    <button type="button" onclick="showDescription()" class="btn btn-secondary" style="margin-top: 15px; margin-left: 25px; margin-bottom: -15px;">
+    <button type="button" onclick="showDescription()" class="btn btn-primary" style="margin-top: 15px; margin-left: 25px; margin-bottom: -15px;">
         Show Description
     </button>
-    <button type="button" onclick="hideDescription()" class="btn btn-secondary" style="margin-top: 15px; margin-left: 25px; margin-bottom: -15px;">
+    <button type="button" onclick="hideDescription()" class="btn btn-primary" style="margin-top: 15px; margin-left: 25px; margin-bottom: -15px;">
         Hide Description
     </button>
-    <button type="button" onclick="showHint()" class="btn btn-primary" style="margin-top: 15px; margin-left: 25px; margin-bottom: -15px;">
+    <button type="button" onclick="showHint()" class="btn btn-info" style="margin-top: 15px; margin-left: 25px; margin-bottom: -15px;">
         Show Hint
     </button>
-    <button type="button" onclick="hideHint()" class="btn btn-primary" style="margin-top: 15px; margin-left: 25px; margin-bottom: -15px;">
+    <button type="button" onclick="hideHint()" class="btn btn-info" style="margin-top: 15px; margin-left: 25px; margin-bottom: -15px;">
         Hide Hint
+    </button>
+    <button type="button" onclick="showImage()" class="btn btn-dark" style="margin-top: 15px; margin-left: 25px; margin-bottom: -15px;">
+        Show Image
+    </button>
+    <button type="button" onclick="hideImage()" class="btn btn-dark" style="margin-top: 15px; margin-left: 25px; margin-bottom: -15px;">
+        Hide Image
     </button>
     <!-- Modal -->
     <div class="modal fade" id="ShareFlashCardsModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -50,21 +56,21 @@
 
     <div class="row row-cols-1 row-cols-md-4 g-4" style="margin-top: 10px; margin-left: 5px; margin-right: 5px;">
         {% for cards in flashcards %}
-        <div class="col">
-            <div class="card">
-                <div class="card-body">
+        <div class="col"> 
+            <div class="card" style="color: black">
+                <div class="card-body" style="background-color: white">
                     <h5 class="card-title"> 
                         {{cards.flashCard_name}} 
                     </h5>
                     <p class="card-text" style="display: block;" id='{{cards.id}}'> <strong>Description:</strong> {{cards.flashCard_description}}</p>
                     <p class="card-text" style="display: none;" id='{{cards.id}}Hint'> <strong>Hint:</strong> {{cards.flashCard_hint}}</p>
+                    <img class="card-text" style="display: none;" id='{{cards.id}}Image' src='{{cards.flashCard_image}}'> </img>
                 </div>
             </div>
         </div>
         <script>
             function hideDescription() {
                 for(var i='{{cards.id}}'; i >= 0; i--){
-                    console.log(i)
                     try{
                         document.getElementById(i).style.display = 'none'
                     }
@@ -74,11 +80,33 @@
                 }
             }
         </script>
-        
+        <script>
+            function showImage() {
+                for(var i='{{cards.id}}'; i >= 0; i--){
+                    try{
+                        document.getElementById(i+'Image').style.display = 'block'
+                    }
+                    catch(TypeError){
+                        continue
+                    }
+                }
+            }
+        </script>
+        <script>
+            function hideImage() {
+                for(var i='{{cards.id}}'; i >= 0; i--){
+                    try{
+                        document.getElementById(i+'Image').style.display = 'none'
+                    }
+                    catch(TypeError){
+                        continue
+                    }
+                }
+            }
+        </script>
         <script>
             function showDescription() {
                 for(var i='{{cards.id}}'; i >= 0; i--){
-                    console.log(i)
                     try{
                         document.getElementById(i).style.display = 'block'
                     }
@@ -91,7 +119,6 @@
         <script>
             function showHint() {
                 for(var i='{{cards.id}}'; i >= 0; i--){
-                    console.log(i)
                     try{
                         document.getElementById(i+'Hint').style.display = 'block'
                     }
@@ -104,7 +131,6 @@
         <script>
             function hideHint() {
                 for(var i='{{cards.id}}'; i >= 0; i--){
-                    console.log(i)
                     try{
                         document.getElementById(i+'Hint').style.display = 'none'
                     }

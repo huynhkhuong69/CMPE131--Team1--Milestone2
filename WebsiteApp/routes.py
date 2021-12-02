@@ -211,22 +211,27 @@ def send_message():
 @app_Obj.route('/share-flashcards', methods=['POST'])
 def share_flashCards():
     flashcards = FlashCards.query.all()
-    if request.method == "POST":
-        try:
-            email = str(request.form['email'])
-            subject = 'Flash Cards'
-            message = Message(subject, sender="teamonecmpe131@gmail.com", recipients=[email])
-            message.body = render_template("share_flashcards.html",flashcards=flashcards)
-            message.html = render_template("share_flashcards.html",flashcards=flashcards)
-            message.attach = render_template("share_flashcards.html",flashcards=flashcards)
-            mail.send(message) #Sends email
-            flash("Flashcards Email Sent!")
-            return redirect('/')
-            
-        except ConnectionRefusedError as connectionRefusedError_:
-            return "Failed to send Email. Please try again later!"
+    if(str(flashcards) == "[]"):
+        print('null')
+        flash('Please create Flashcards before attempting to share!')
+        return redirect('/create-edit-flashcards/')
     else:
-        return render_template("view_flashcards.html")
+        if request.method == "POST":
+            try:
+                email = str(request.form['email'])
+                subject = 'Flash Cards'
+                message = Message(subject, sender="teamonecmpe131@gmail.com", recipients=[email])
+                message.body = render_template("share_flashcards.html",flashcards=flashcards)
+                message.html = render_template("share_flashcards.html",flashcards=flashcards)
+                message.attach = render_template("share_flashcards.html",flashcards=flashcards)
+                mail.send(message) #Sends email
+                flash("Flashcards Email Sent!")
+                return redirect('/')
+                
+            except ConnectionRefusedError as connectionRefusedError_:
+                return "Failed to send Email. Please try again later!"
+        else:
+            return render_template("view_flashcards.html")
 
 @app_Obj.route('/timer', methods = ['GET', 'POST'])
 def pomodoro ():
@@ -266,3 +271,15 @@ def imageSearch(keyword):
             pass
     json_data = json.dumps(srcList)
     return json_data
+
+@app_Obj.route('/api/save-flashcard/<string:title>/<string:description>/<string:hint>/<string:href>', methods=['POST'])
+def save_Flashcard(title,description,hint,href):
+    form = create_FlashCardsForm()
+    href = "https://encrypted-tbn0.gstatic.com/images?q=tbn:"+href
+    new_flashCard = FlashCards(flashCard_name = title, flashCard_description = description, flashCard_hint=hint, flashCard_image=href)
+    try:
+        db.session.add(new_flashCard)
+        db.session.commit()
+        return ''
+    except:
+        return ''
