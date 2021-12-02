@@ -1,0 +1,15 @@
+{% extends "base.html" %} {% block content %}
+
+<form method="POST" enctype="multipart/form-data" novalidate>
+  {{ form.csrf_token }}
+  <p>
+    {{ form.file.label }} <br />
+    {{ form.file(size=32) }}
+  </p>
+
+  <p>{{ form.submit() }}</p>
+</form>
+
+{{ html }} {% for x in html %}
+<p>{{ x }}</p>
+{% endfor %} {% endblock %}

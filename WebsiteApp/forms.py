@@ -1,7 +1,7 @@
 # Login Form Stuff should go here
 from flask.helpers import flash
 from flask_wtf import FlaskForm
-from wtforms import StringField, PasswordField, BooleanField, SubmitField, IntegerField
+from wtforms import StringField, PasswordField, BooleanField, SubmitField, IntegerField, FileField
 from wtforms.validators import DataRequired, EqualTo
 from wtforms.widgets.core import TextArea
 
@@ -38,3 +38,8 @@ class pomorodoTimerForm (FlaskForm):
     # break_time = IntegerField('Break Time', validators = [DataRequired()])
     start_button = SubmitField('Start')
     # reset_button = SubmitField('Reset')
+
+class noteForm (FlaskForm):
+    file = FileField('Choose file to upload')
+    submit = SubmitField('Upload')
+    

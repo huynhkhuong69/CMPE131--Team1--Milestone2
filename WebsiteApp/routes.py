@@ -1,6 +1,9 @@
 from datetime import datetime
 import time
 import pyttsx3
+import os, markdown, pdfkit
+import pandas as pd
+import networkx as nx
 
 from flask import *  # Imports all the functions at once (render_template,flash,etc.)
 from flask_login import current_user, login_required, login_user, logout_user
@@ -9,7 +12,7 @@ from werkzeug.security import generate_password_hash
 from werkzeug.wrappers import response
 
 from WebsiteApp import app_Obj, db, mail
-from WebsiteApp.forms import (LoginForm, RegisterForm, SettingsForm, ToDoListForm, create_FlashCardsForm , pomorodoTimerForm )
+from WebsiteApp.forms import (LoginForm, RegisterForm, SettingsForm, ToDoListForm, create_FlashCardsForm , pomorodoTimerForm, noteForm )
 from WebsiteApp.models import FlashCards, ToDoList, User
 
 from bs4 import BeautifulSoup
@@ -283,3 +286,27 @@ def save_Flashcard(title,description,hint,href):
         return ''
     except:
         return ''
+
+#Note render
+@app_Obj.route("/render", methods=['GET', 'POST'])
+@login_required
+def notes_render():
+    html = ""
+    form = noteForm()
+    if form.validate_on_submit():
+        text = form.file.data.read()
+        newtext = str(text).replace("<p>b'",'').replace("'</p>",'')# Reads Markdown and Displays as string
+        html = newtext[4:-3].split('\\n') #display a file as markdown format
+    return render_template("notes_render.html", form=form, html = html)
+
+# Notes Markdown to Pdf
+@app_Obj.route("/mark-to-pdf", methods=['GET', 'POST'])
+@login_required
+def notes_renderer():
+    html = ""
+    form = noteForm()
+    if form.validate_on_submit():
+        text = form.file.data.read()
+        text = str(text).replace("<p>b'", '').replace("'</p>",'')    # Reads Markdown and Displays as string
+        pdfkit.from_string(text, 'note.pdf')
+    return render_template("notes_marktopdf.html", form=form)

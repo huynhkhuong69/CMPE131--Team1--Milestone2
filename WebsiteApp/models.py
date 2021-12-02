@@ -39,6 +39,16 @@ class FlashCards(UserMixin, db.Model):
     def __repr__(self):
         return f'<FlashCard {self.id} : {self.flashCard_name}><Image: {self.flashCard_image}>'
 
+class Note(UserMixin, db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    note = db.Column(db.String(1024), index=True)
+    share_id = db.Column(db.Integer)
+    author_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+
+    def __repr__(self):
+        return f'Id: {self.id} |{self.note}|'
+
+
 @login.user_loader
 def load_user(id):
     return User.query.get(int(id))
