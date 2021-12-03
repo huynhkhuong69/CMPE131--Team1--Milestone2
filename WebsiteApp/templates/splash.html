@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+        integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+
+    </head>
+    <style>
+        .splash {
+            position: fixed;
+            top: 0;
+            left: 0;
+            bottom: 0;
+            width: 100%;
+            height: 100vh;
+            z-index: 200;
+            color: white;
+            text-align: center;
+            background-image: url(../../docFiles/docs/img/png.png);
+            background-size: cover;
+        }
+        h1 {
+        margin-top: 25%;
+        font-size: 48px;
+    }
+
+    .continue {
+        color: #fff;
+        margin-bottom: auto;
+        font-size: 24px;
+    }
+</style>
+
+<body onload="setTimeout()">
+    <div class="splash" id="image">
+        <h1>Welcome to our Project</h1>
+        <a href="#" onclick="redirect()" class="continue"><span></span>Continue to Page &raquo </a>
+    </div>
+    <script>
+        window.onload = timeout;
+            function timeout() {
+                window.setTimeout("redirect()", 10000)
+            }
+
+            function redirect() {
+                window.location = "home.html"
+                return
+            }
+        function timeout_clear() {
+            clearTimeout(window);
+            window.location = "home.html";
+        }
+    </script>
+</body>
+</html>
