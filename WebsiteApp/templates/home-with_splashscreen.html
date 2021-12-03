@@ -1,0 +1,107 @@
+{% extends 'base.html' %} {% block content %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <!-- Required meta tags -->
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <!-- Bootstrap CSS -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+
+</head>
+
+<style>
+  .splash{
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100vh;
+    z-index: 200;
+    color: white;
+    text-align: center;
+    background-image: url(../../docFiles/docs/img/png.png);
+}
+h1{
+  margin-top:25%;
+  font-size: 48px;
+}
+.continue{
+  color:#fff;
+  margin-bottom: auto;
+  font-size: 24px;
+}
+</style>
+  <body>
+<div class="splash" id="image">
+  <h1>Welcome to our Project</h1>
+  <a href="#"  onclick="timeout_clear()" class="continue"><span></span>Continue to Page &raquo </a>
+</div>
+    <div class="container-fluid">
+      <h1 style="background-color:green" class="text-center">
+        Learning Tool - CMPE 131 Project
+      </h1>
+      <div class="text-center" style="color: black">
+        <img
+          src="/static/cmpe131.png"
+          id="Sample_Image"
+          width="200"
+          height="200"
+        />
+        <h1>Features</h1>
+      </div>
+      <div style="margin-top: 15px; color: black">
+        <ul class="text-center" style="margin-left: -70px">
+          <ol>
+            Register/Login Function
+          </ol>
+          <ol>
+            Delete account
+          </ol>
+          <ol>
+            Share Flash Cards
+          </ol>
+          <ol>
+            Email Users
+          </ol>
+          <ol>
+            To-Do-List
+          </ol>
+          <ol>
+            Timer
+          </ol>
+          <ol>
+            Break Alerts
+          </ol>
+          <ol>
+            Light + Dark Mode
+          </ol>
+        </ul>
+      </div>
+    </div>
+   <script>
+      var image = document.getElementById("image");
+        setTimeout(function () {
+          image.style.display = "none";
+        }, 10000);
+        function timeout_clear() {
+          clearTimeout(image);
+         image.style.display = "none";
+        }
+    </script>
+    <script>
+      setTimeout(function confirmAction() {
+        let confirmAction = confirm(
+          "You've studied for one hour. Do you want to take a break?"
+        );
+        if (confirmAction) {
+          alert("Enjoy your break!");
+        } else {
+          alert("Have a good study!");
+        }
+      }, 3600000);
+      
+    </script>
+  </body>
+</html>
+{% endblock %}
